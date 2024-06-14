@@ -12,8 +12,13 @@ class StoreRepository {
     }
 
     async findById(id) {
-        const [row] = await db.query('SELECT * FROM produto WHERE lojaid = $1', [id]);
-        return row;
+        const rows = await db.query('SELECT * FROM produto WHERE lojaid = $1', [id]);
+        return rows;
+    }
+
+    async findMyStore(userid) {
+        const rows = await db.query('SELECT * FROM loja WHERE userid = $1', [userid]);
+        return rows;
     }
 
 }

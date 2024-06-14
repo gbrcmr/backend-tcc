@@ -19,12 +19,21 @@ class StoreController {
 
         const store = await StoreRepository.findById(id);
 
-        // if (!categorie) {
-        //     // 404: Not Found
-        //     return response.status(404).json({ error: 'Category not found' });
-        // }
-
         response.json(store);
+    }
+
+    async findMyStore(request, response) {
+        const { userid } = request.params;
+
+        const storeid = await StoreRepository.findMyStore(userid);
+
+        response.json(storeid);
+    }
+
+    async addToCart(request, response) {
+        const { userid, prodids } = request.body;
+        const cart = await StoreRepository.createStore(userid, prodids);
+        response.json(cart);
     }
 }
 

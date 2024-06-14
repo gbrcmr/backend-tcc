@@ -25,12 +25,42 @@ class UserRepository {
         return row;
     }
 
-    async createProduct(prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod) {
+    async createProduct(prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod, preco_prod) {
         const [row] = await db.query(`
-        INSERT INTO produto(prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod)
-        VALUES($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO produto(prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod, preco_prod)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING *
-    `, [prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod]);
+    `, [prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod, preco_prod]);
+        return row;
+    }
+
+    async findByProductId(prodid) {
+        const rows = await db.query('SELECT * FROM produto WHERE prodid = $1', [prodid]);
+        return rows;
+    }
+
+    async chartById(userid) {
+        const rows = await db.query('SELECT carrinho FROM usuario WHERE userid = $1', [userid]);
+        return rows;
+    }
+
+    async addToCart(prodid, userid) {
+        const [rows] = await db.query(`
+        UPDATE usuario
+        SET carrinho = array_append(carrinho, $1)
+        WHERE userid = $2
+        RETURNING *
+    `, [prodid, userid]);
+
+        return rows;
+    }
+
+    async removeFromCart(prodid, userid) {
+        const [row] = await db.query(`
+        UPDATE usuario
+        SET carrinho = array_remove(carrinho, $1)
+        WHERE userid = $2;
+    `, [prodid, userid]);
         return row;
     }
 }

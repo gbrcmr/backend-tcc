@@ -23,11 +23,45 @@ class UserController {
         const store = await UserRepository.createStore(userid, lojaid, nome_loja, email_loja, telefone_loja, instagram);
         response.json(store);
     }
+
     async createProduct(request, response) {
-        const { prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod } = request.body;
-        const product = await UserRepository.createProduct(prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod);
+        const { prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod, preco_prod } = request.body;
+        const product = await UserRepository.createProduct(prodid, lojaid, descricao_prod, tamanho_prod, tipo_prod, nome_prod, foto_prod, preco_prod);
         response.json(product);
     }
+
+    async chartById(request, response) {
+        const { userid } = request.params;
+        const cart = await UserRepository.chartById(userid);
+
+        response.json(cart);
+    }
+
+    async findByProductId(request, response) {
+        const { prodid } = request.params;
+
+        const prod = await UserRepository.findByProductId(prodid);
+
+        response.json(prod);
+    }
+
+    async addToCart(request, response) {
+        const { prodid, userid } = request.params;
+        const cart = await UserRepository.addToCart(prodid, userid);
+
+        response.json(cart);
+
+    }
+
+    async removeFromCart(request, response) {
+        const { prodid, userid } = request.params;
+        const cart = await UserRepository.removeFromCart(prodid, userid);
+
+        response.json(cart);
+
+    }
+
+
 }
 
 
