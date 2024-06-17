@@ -45,6 +45,14 @@ class UserController {
         response.json(prod);
     }
 
+    async findUser(request, response) {
+        const { id } = request.params;
+
+        const user = await UserRepository.findUser(id);
+
+        response.json(user);
+    }
+
     async addToCart(request, response) {
         const { prodid, userid } = request.params;
         const cart = await UserRepository.addToCart(prodid, userid);

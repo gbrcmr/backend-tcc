@@ -34,6 +34,11 @@ class UserRepository {
         return row;
     }
 
+    async findUser(id) {
+        const rows = await db.query('SELECT * FROM usuario WHERE userid = $1', [id]);
+        return rows;
+    }
+
     async findByProductId(prodid) {
         const rows = await db.query('SELECT * FROM produto WHERE prodid = $1', [prodid]);
         return rows;
